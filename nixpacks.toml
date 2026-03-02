@@ -8,8 +8,14 @@ nixPkgs = [
   "ttf-dejavu",
 ]
 
+[phases.install]
+cmds = [
+  "npm install --prefix server",
+  "npm install --prefix client",
+]
+
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["npm run build --prefix client"]
 
 [start]
 cmd = "npm start"
