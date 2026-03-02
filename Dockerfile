@@ -15,16 +15,19 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 
 WORKDIR /app
 
-# 서버 의존성 설치
+# 서버 의존성 설치 (레이어 캐시 최적화)
 COPY server/package*.json ./server/
 RUN npm install --prefix server
 
-# 클라이언트 의존성 설치 및 빌드
+# 클라이언트 의존성 설치 (레이어 캐시 최적화)
 COPY client/package*.json ./client/
 RUN npm install --prefix client
+
+# 클라이언트 소스 복사 후 빌드
+COPY client/ ./client/
 RUN npm run build --prefix client
 
-# 소스 복사
+# 서버 소스 복사
 COPY server/ ./server/
 COPY package.json ./
 
