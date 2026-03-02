@@ -14,10 +14,11 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// 개발 환경: 로컬 Vite 개발 서버 허용
-if (!isProd) {
-  app.use(cors({ origin: 'http://localhost:5173' }));
-}
+// CORS: 개발은 Vite 로컬, 프로덕션은 /api 전체 허용
+app.use('/api', cors({
+  origin: isProd ? '*' : 'http://localhost:5173',
+  methods: ['POST', 'OPTIONS'],
+}));
 
 app.use(express.json());
 app.use('/api/convert', convertRouter);
